@@ -14,7 +14,7 @@ Add `silex/psr-7-service-provider` to your project's `composer.json`:
 ```json
 {
     "require": {
-        "silex/psr-7-service-provider": "~1.0"
+         "marvin_b8/psr-7-service-provider": "2.0.x-dev"
     }
 }
 ```
