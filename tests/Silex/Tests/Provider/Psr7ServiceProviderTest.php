@@ -23,5 +23,18 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Psr7ServiceProviderTest extends WebTestCase
 {
+'Psr\Http\Message\ServerRequestInterface' => true,
+'Psr\Http\Message\RequestInterface' => true,
+'Psr\Http\Message\MessageInterface' => true,
+    public function testGetArguments()
+    {
+        $app = new Application();
+        $resolver = new ControllerResolver($app);
+
+        $controller = function (Application $app) {};
+
+        $args = $resolver->getArguments(Request::create('/'), $controller);
+        $this->assertSame($app, $args[0]);
+    }
 
 }
