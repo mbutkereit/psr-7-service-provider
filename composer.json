@@ -1,0 +1,25 @@
+{
+    "name": "silex/psr-7-service-provider",
+    "description": "A Psr-7 service provider for Silex.",
+    "keywords": ["Service-Provider", "PSR-7", "silex"],
+    "homepage": "https://github.com/mbutkereit/psr-7-service-provider",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marvin Butkereit"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "silex/silex": "~2.0@dev",
+        "symfony/psr-http-message-bridge": "^0.2.0",
+        "zendframework/zend-diactoros": "^1.1"
+    },
+    "autoload": {
+        "psr-4": { "Silex\\": "src/Silex" }
+    },
+    "autoload-dev" : {
+        "psr-4": { "Silex\\Tests\\" : "tests/Silex/Tests" }
+    }
+}
