@@ -11,8 +11,9 @@
 
 namespace Silex\Provider;
 
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
+
+use Silex\Application;
+use Silex\ServiceProviderInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
@@ -38,34 +39,34 @@ class Psr7ServiceProvider implements ServiceProviderInterface
         'Psr\Http\Message\MessageInterface' => true,
     );
 
-    public function register(Container $container)
+    public function register(Application $app)
     {
-        $container['psr7.http_foundation_factory'] = function () {
+        $app['psr7.http_foundation_factory'] = function () {
             return new HttpFoundationFactory();
         };
 
-        $container['psr7.http_message_factory'] = function () {
+        $app['psr7.http_message_factory'] = function () {
             return new DiactorosFactory();
         };
 
 
-        $container['dispatcher']->addListener(
+        $app['dispatcher']->addListener(
             KernelEvents::VIEW,
-            function (GetResponseForControllerResultEvent $event) use ($container) {
+            function (GetResponseForControllerResultEvent $event) use ($app) {
                 $controllerResult = $event->getControllerResult();
 
                 if (!$controllerResult instanceof ResponseInterface) {
                     return;
                 }
 
-                $event->setResponse($container['psr7.http_foundation_factory']->createResponse($controllerResult));
+                $event->setResponse($app['psr7.http_foundation_factory']->createResponse($controllerResult));
             }
         );
 
 
-        $container['dispatcher']->addListener(
+        $app['dispatcher']->addListener(
             KernelEvents::CONTROLLER,
-            function (FilterControllerEvent $event) use ($container) {
+            function (FilterControllerEvent $event) use ($app) {
 
                 $controller = $event->getController();
                 $request = $event->getRequest();
@@ -82,11 +83,15 @@ class Psr7ServiceProvider implements ServiceProviderInterface
                     if ($param->getClass() && isset(self::$supportedTypes[$param->getClass()->name])) {
                         $request->attributes->set(
                             $param->name,
-                            $container['psr7.http_message_factory']->createRequest($request)
+                            $app['psr7.http_message_factory']->createRequest($request)
                         );
                     }
                 }
             }
         );
+    }
+
+    public function boot(Application $app)
+    {
     }
 }
