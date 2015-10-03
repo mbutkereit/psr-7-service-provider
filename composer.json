@@ -1,5 +1,5 @@
 {
-    "name": "silex/psr-7-service-provider",
+    "name": "marvin_B8/psr-7-service-provider",
     "description": "A Psr-7 service provider for Silex.",
     "keywords": ["Service-Provider", "PSR-7", "silex"],
     "homepage": "https://github.com/mbutkereit/psr-7-service-provider",
